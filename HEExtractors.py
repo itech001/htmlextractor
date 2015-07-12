@@ -38,7 +38,7 @@ class SinaBlogExtractor(ContentExtractor):
 
     def calculate_best_node(self, doc):
         #print(lxml.html.tostring(doc))  #doc.text_content()
-        top_nodes = Parser.xpath_re(doc,'//*[@id="articlebody"]')
+        top_nodes = Parser.xpath_re(doc,'//*[@id="sina_keyword_ad_area2"]')
         if len(top_nodes) < 1:
             top_node = ContentExtractor.calculate_best_node(self,doc)
         else:

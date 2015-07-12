@@ -73,8 +73,11 @@ def downloadFile(link,category,config,date,tags):
             os.makedirs(outFileDir)
         outPath = outFileDir + title2 + '.html'
 
-        content = a.text
-        content_html = a.article_html
+        if config.keep_article_html:
+            content = a.article_html
+            content_html = content
+        else:
+            content = a.text
 
         date2 = None
         try:
@@ -86,7 +89,7 @@ def downloadFile(link,category,config,date,tags):
 
         authors = ','.join(a.authors)
         if(content_html):
-            domain = getDomain(link)
+            #domain = getDomain(link)
             #content_html = fixLinks(content_html,domain)
             writeHtml(outPath,content_html,a.title,link,date,authors,tags)
         elif(content):
