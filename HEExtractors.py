@@ -9,7 +9,7 @@ class SinaBlogExtractor(ContentExtractor):
         ContentExtractor.__init__(self,config)
 
     def get_authors(self, doc):
-        nodes = Parser.xpath_re(doc,'//*[@id="ownernick"]')
+        nodes = Parser.css_select(doc,'#ownernick')
         if len(nodes) > 0:
             s = Parser.getText(nodes[0])
             print("authors: " + s)
@@ -27,7 +27,7 @@ class SinaBlogExtractor(ContentExtractor):
                 print(e)
                 return None
 
-        nodes = Parser.xpath_re(doc,'//*[@id="articlebody"]/div[1]/span')
+        nodes = Parser.css_select(doc,'#articlebody > div.articalTitle > span.time.SG_txtc')
         if len(nodes) > 0 :
             s = Parser.getText(nodes[0])
             s = re.sub('[\(\)]','',s)
@@ -38,7 +38,7 @@ class SinaBlogExtractor(ContentExtractor):
 
     def calculate_best_node(self, doc):
         #print(lxml.html.tostring(doc))  #doc.text_content()
-        top_nodes = Parser.xpath_re(doc,'//*[@id="sina_keyword_ad_area2"]')
+        top_nodes = Parser.css_select(doc,'#sina_keyword_ad_area2')
         if len(top_nodes) < 1:
             top_node = ContentExtractor.calculate_best_node(self,doc)
         else:
