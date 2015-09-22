@@ -48,7 +48,7 @@ def writeHtml(outPath,content,title,link,date,authors,tags):
         writeFile(outPath,html)
         print("save to:" + outPath)
 
-def downloadFile(link,category,config,date,tags):
+def downloadFile(link,category,config,date,tags,filter):
     print('download article from:' + link)
     try:
         try:
@@ -64,6 +64,10 @@ def downloadFile(link,category,config,date,tags):
         if a.title == '':
            print("cannot find title for " + link)
            return 0
+
+        if filter and not re.search(filter,a.title):
+            print("The title doesn't match filter,ignored.")
+            return 0
 
         print('title:' + a.title)
         title2 = re.sub(' ','_',a.title)
@@ -102,13 +106,13 @@ def downloadFile(link,category,config,date,tags):
         return 0
     return 1
 
-def downloadArticles(url,category,config,regex_for_links,tags):
+def downloadArticles(url,category,config,regex_for_links,tags,filter):
     print('download from articles:' + url)
     all = getLinks(url,regex_for_links)
     for article in all[:config.max_number]:
-        downloadFile(article,category,config,'',tags)
+        downloadFile(article,category,config,'',tags,filter)
 
-def downloadFeed(feed,category,config,tags):
+def downloadFeed(feed,category,config,tags,filter):
             print('download from feed:' + feed)
             d = feedparser.parse(feed)
             for entry in d.entries[:config.max_number]:
@@ -123,7 +127,7 @@ def downloadFeed(feed,category,config,tags):
                     date = entry.published
                 except Exception as e:
                     print(e)
-                downloadFile(entry.link,category,config,date,tags)
+                downloadFile(entry.link,category,config,date,tags,filter)
 
 def downloadByConfig(urls,config):
   print('download from config')
